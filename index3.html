@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cahier de vacances managérial — Variante 1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+        }
+
+        section {
+            padding: 60px 40px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* AUDIO PLAYER STYLE */
+        audio {
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            display: block;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .audio-label {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            margin-top: 20px;
+            font-weight: 600;
+        }
+
+        .audio-button {
+            display: inline-block;
+            margin: 20px auto;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #EE6C4D 0%, #FF8C6B 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(238, 108, 77, 0.3);
+            transition: all 0.3s ease;
+            border: 2px solid #EE6C4D;
+            cursor: pointer;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .audio-button:hover {
+            background: linear-gradient(135deg, #FF8C6B 0%, #FF9E7C 100%);
+            box-shadow: 0 6px 20px rgba(238, 108, 77, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .audio-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(238, 108, 77, 0.3);
+        }
+
+        /* SECTION 1: COUVERTURE */
+        .cover {
+            background: linear-gradient(135deg, #1B3A5C 0%, #0f2438 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .cover h1 {
+            font-size: 56px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .cover .subtitle {
+            font-size: 36px;
+            color: #EE6C4D;
+            font-style: italic;
+            margin-bottom: 40px;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.15);
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .cover p {
+            font-size: 18px;
+            margin-top: 30px;
+            opacity: 0.95;
+        }
+
+        /* SECTION 2: HISTOIRE */
+        .section-histoire {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff5e6 100%);
+        }
+
+        .section-histoire h2 {
+            text-align: center;
+            font-size: 40px;
+            color: #EE6C4D;
+            margin-bottom: 30px;
+        }
+
+        .story-intro {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 16px;
+            color: #333;
+            font-style: italic;
+        }
+
+        .audio-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .audio-section h3 {
+            color: #EE6C4D;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        /* SECTION 3: QUIZ */
+        .section-quiz {
+            background: white;
+        }
+
+        .section-quiz h2 {
+            text-align: center;
+            font-size: 40px;
+            color: #EE6C4D;
+            margin-bottom: 40px;
+        }
+
+        /* QUIZ INTERACTIF */
+        .quiz-interactive {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e8f4f8 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-container {
+            display: none;
+        }
+
+        .quiz-container.active {
+            display: block;
+        }
+
+        .progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0,0,0,0.1);
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin: 0 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #EE6C4D, #2A9D8F);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+        }
+
+        .question-number {
+            font-size: 12px;
+            color: #EE6C4D;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .question-text {
+            font-size: 18px;
+            color: #1B3A5C;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .answers-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .answer-btn {
+            padding: 14px 16px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-size: 15px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .answer-btn:hover:not(.disabled) {
+            border-color: #2A9D8F;
+            background: #f0f8f6;
+            transform: translateX(5px);
+        }
+
+        .answer-btn.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .answer-btn.correct {
+            border-color: #2A9D8F;
+            background: #e6f7f0;
+            color: #1B3A5C;
+        }
+
+        .answer-btn.correct::before {
+            content: "✅ ";
+        }
+
+        .answer-btn.incorrect {
+            border-color: #EE6C4D;
+            background: #ffe6e0;
+            color: #1B3A5C;
+        }
+
+        .answer-btn.incorrect::before {
+            content: "❌ ";
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.5;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .feedback.correct {
+            background: #e6f7f0;
+            color: #1B3A5C;
+            border-left: 4px solid #2A9D8F;
+        }
+
+        .feedback.incorrect {
+            background: #ffe6e0;
+            color: #1B3A5C;
+            border-left: 4px solid #EE6C4D;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .next-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: #2A9D8F;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .next-btn.show {
+            display: block;
+        }
+
+        .next-btn:hover {
+            background: #1d7a6b;
+        }
+
+        .results {
+            display: none;
+            text-align: center;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .results-emoji {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .results-score {
+            font-size: 36px;
+            color: #EE6C4D;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .results-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .results-message {
+            font-size: 13px;
+            color: #333;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .restart-btn {
+            padding: 10px 30px;
+            background: #1B3A5C;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            background: #0f2438;
+        }
+
+        /* SECTION 4: PODCASTS */
+        .section-podcasts {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e8f4f8 100%);
+        }
+
+        .section-podcasts h2 {
+            text-align: center;
+            font-size: 40px;
+            color: #EE6C4D;
+            margin-bottom: 40px;
+        }
+
+        .resources-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .resource-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .resource-card h4 {
+            color: #EE6C4D;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .resource-card .meta {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .resource-card .desc {
+            font-size: 13px;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .resource-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .link-btn {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #2A9D8F;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .link-btn:hover {
+            background: #1d7a6b;
+        }
+
+        /* SECTION 5: CHANSONS */
+        .section-chansons {
+            background: white;
+        }
+
+        .section-chansons h2 {
+            text-align: center;
+            font-size: 40px;
+            color: #EE6C4D;
+            margin-bottom: 40px;
+        }
+
+        .songs-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .song-item {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #2A9D8F;
+            font-size: 14px;
+        }
+
+        .song-title {
+            font-weight: 600;
+            color: #1B3A5C;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .song-meta {
+            font-size: 12px;
+            color: #666;
+            display: block;
+        }
+
+        .song-link {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 5px 12px;
+            background: #2A9D8F;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 11px;
+        }
+
+        /* SECTION 6: RESSOURCES */
+        .section-ressources {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e8f4f8 100%);
+        }
+
+        .section-ressources h2 {
+            text-align: center;
+            font-size: 40px;
+            color: #EE6C4D;
+            margin-bottom: 40px;
+        }
+
+        .resources-section {
+            margin-bottom: 30px;
+        }
+
+        .resources-section h3 {
+            color: #EE6C4D;
+            border-bottom: 3px solid #EE6C4D;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .resource-item {
+            background: white;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #333;
+            line-height: 1.6;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+
+        .resource-item strong {
+            color: #1B3A5C;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .resource-item p {
+            margin-bottom: 8px;
+        }
+
+        .resource-item a {
+            color: #2A9D8F;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .resource-item a:hover {
+            text-decoration: underline;
+        }
+
+        .resource-item .why {
+            font-style: italic;
+            color: #666;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .film-item {
+            background: white;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #333;
+            line-height: 1.6;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+
+        .film-item strong {
+            color: #1B3A5C;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .film-item .connection {
+            font-style: italic;
+            color: #666;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        /* SECTION 7: ANNONCE PROCHAIN CAHIER */
+        .section-announcement {
+            background: linear-gradient(135deg, #1B3A5C 0%, #2A9D8F 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .section-announcement h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #EE6C4D;
+        }
+
+        .announcement-box {
+            background: rgba(255,255,255,0.15);
+            padding: 40px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            margin: 30px 0;
+        }
+
+        .announcement-box .emoji {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .announcement-box .subtitle {
+            font-size: 28px;
+            color: #EE6C4D;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .announcement-box .content {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .countdown {
+            font-size: 36px;
+            color: #EE6C4D;
+            font-weight: 700;
+            margin: 20px 0;
+        }
+
+        .variants-preview {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .variant-badge {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .variant-badge strong {
+            color: #EE6C4D;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .closing {
+            font-size: 18px;
+            margin-top: 40px;
+            font-weight: 600;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            section {
+                padding: 40px 20px;
+                min-height: auto;
+            }
+
+            .cover h1 {
+                font-size: 36px;
+            }
+
+            .cover .subtitle {
+                font-size: 24px;
+            }
+
+            h2 {
+                font-size: 28px !important;
+            }
+
+            .variants-preview {
+                grid-template-columns: 1fr;
+            }
+
+            .resource-links {
+                flex-direction: column;
+            }
+
+            .link-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* PRINT */
+        @media print {
+            section {
+                page-break-after: always;
+                min-height: auto;
+            }
+
+            audio {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- SECTION 1: COUVERTURE -->
+<section class="cover">
+    <h1>🌍 Cahier de vacances</h1>
+    <p class="subtitle">Management ailleurs</p>
+    
+    <div class="badges">
+        <div class="badge">📅 11-31 août 2026</div>
+        <div class="badge">✈️ Edition 3/3</div>
+    </div>
+    
+    <p>Trois semaines pour voir le management autrement, s'inspirer d'ailleurs et rêver un peu.</p>
+</section>
+
+<!-- SECTION 3: QUIZ INTERACTIF -->
+<section class="section-quiz">
+    <h2>🎯 Quiz interactif</h2>
+    
+    <div class="quiz-interactive">
+        <div id="quiz" class="quiz-container active">
+            <div class="progress">
+                <span class="progress-text"><span id="currentQuestion">1</span> / 3</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-number" id="qNumber">Question 1</div>
+                <div class="question-text" id="questionText"></div>
+                
+                <div class="answers-grid" id="answersGrid"></div>
+                
+                <div class="feedback" id="feedback"></div>
+            </div>
+
+            <button class="next-btn" id="nextBtn">Question suivante →</button>
+        </div>
+
+        <div id="results" class="results">
+            <div class="results-emoji" id="emoji">🎉</div>
+            <div class="results-score" id="score">0/3</div>
+            <div class="results-subtitle" id="subtitle"></div>
+            <div class="results-message" id="message"></div>
+            <button class="restart-btn" id="restartBtn">Recommencer le quiz</button>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 4: PODCASTS -->
+<section class="section-podcasts">
+    <h2>🎧 Podcasts pour voir ailleurs</h2>
+    
+    <div class="resources-grid">
+        <div class="resource-card">
+            <h4>À écouter sur Spotify</h4>
+            <p class="meta">Spotify</p>
+            <p class="desc">Un podcast pour s'ouvrir à d'autres horizons et nourrir sa réflexion pendant les vacances. Parfait pour les longs trajets ou les moments de pause.</p>
+            <div class="resource-links">
+                <a href="https://open.spotify.com/show/7uIBeXw3HwRGFhxrvVVHXr?si=abb48568a5b74a76" target="_blank" class="link-btn">Spotify</a>
+            </div>
+        </div>
+
+        <div class="resource-card">
+            <h4>Management : la France, mauvais élève ?</h4>
+            <p class="meta">France Culture - Les Matins</p>
+            <p class="desc">Pourquoi la France est-elle à la traîne en Europe sur le management? Un regard comparatif stimulant pour s'inspirer des pratiques d'ailleurs.</p>
+            <div class="resource-links">
+                <a href="https://www.radiofrance.fr/franceculture/podcasts/france-culture-va-plus-loin-l-invite-e-des-matins/management-pourquoi-la-france-est-elle-le-mauvais-eleve-de-l-europe-1593004" target="_blank" class="link-btn">France Culture</a>
+            </div>
+        </div>
+
+        <div class="resource-card">
+            <h4>Le Mag de la vie quotidienne</h4>
+            <p class="meta">France Inter</p>
+            <p class="desc">Des conseils et des idées pour mieux vivre au quotidien, ici et ailleurs. Une bulle d'inspiration douce pour repenser ses habitudes.</p>
+            <div class="resource-links">
+                <a href="https://www.radiofrance.fr/franceinter/podcasts/le-mag-de-la-vie-quotidienne/le-mag-vie-quotidienne-du-mardi-02-septembre-2025-4518987" target="_blank" class="link-btn">France Inter</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 5: CHANSONS -->
+<section class="section-chansons">
+    <h2>🎵 Playlists pour voyager en musique</h2>
+    
+    <div class="songs-list">
+        <div class="song-item">
+            <span class="song-title">📱 Playlist Spotify — Évasion & ailleurs</span>
+            <span class="song-meta">Des sons du monde pour voyager sans bouger</span>
+            <a href="https://open.spotify.com/playlist/3tUSVKIrGg1HriEBGu7i1i?si=f2a4aa9ed1774707" target="_blank" class="song-link">Spotify</a>
+        </div>
+
+        <div class="song-item">
+            <span class="song-title">🎧 Playlist Deezer — Horizons lointains</span>
+            <span class="song-meta">La bande-son parfaite pour rêver de destinations</span>
+            <a href="https://link.deezer.com/s/33KeD1qk42JLB25rZAE9w" target="_blank" class="song-link">Deezer</a>
+        </div>
+
+        <div class="song-item">
+            <span class="song-title">🎬 Playlist YouTube — Voyage musical</span>
+            <span class="song-meta">Une sélection continue pour s'évader en musique</span>
+            <a href="https://www.youtube.com/watch?v=p--xk9n1eIM&list=RDCLAK5uy_ml-p0YIGKW7K7ayomm6Ur1Lewywn2R-Io&index=2" target="_blank" class="song-link">YouTube</a>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 6: RESSOURCES -->
+<section class="section-ressources">
+    <h2>📚 Ressources complètes</h2>
+    
+    <div class="resources-section">
+        <h3>✍️ Poésies & slams pour rêver d'ailleurs</h3>
+        
+        <div class="resource-item">
+            <strong>"L'Invitation au voyage" — Charles Baudelaire</strong>
+            <p><a href="https://fr.wikisource.org/wiki/L%E2%80%99Invitation_au_voyage_(Le_Spleen_de_Paris)" target="_blank">Lire sur Wikisource</a> — gratuit</p>
+            <p class="why">💡 Pourquoi lire: "Là, tout n'est qu'ordre et beauté, luxe, calme et volupté." Le poème d'évasion par excellence. Une invitation à imaginer un ailleurs où il fait bon vivre.</p>
+        </div>
+
+        <div class="resource-item">
+            <strong>"Le Bateau ivre" — Arthur Rimbaud</strong>
+            <p><a href="https://fr.wikisource.org/wiki/Po%C3%A9sies_(Rimbaud)/%C3%A9d._Vanier,_1895" target="_blank">Lire sur Wikisource</a></p>
+            <p class="why">💡 Pourquoi lire: Le grand voyage libérateur, écrit par un ado génial. Sur le désir de larguer les amarres et de se laisser porter. Vertigineux et magnifique.</p>
+        </div>
+
+        <div class="resource-item">
+            <strong>Grand Corps Malade — L'art du slam</strong>
+            <p><a href="https://www.youtube.com/results?search_query=grand+corps+malade+slam" target="_blank">Écouter sur YouTube</a></p>
+            <p class="why">💡 Pourquoi écouter: Le slam raconte le quotidien avec poésie et humanité. "Midi 20", "Roméo kiffe Juliette"... Des textes qui parlent de vivre-ensemble et de regard sur l'autre. Le management ailleurs commence par écouter d'autres voix.</p>
+        </div>
+    </div>
+
+    <div class="resources-section">
+        <h3>🌍 Destinations qui font rêver</h3>
+        
+        <div class="resource-item">
+            <strong>Le Japon — L'art du kaizen</strong>
+            <p class="why">✈️ L'inspiration managériale: Au pays du "kaizen" (l'amélioration continue par petits pas) et de l'"ikigai" (la raison d'être). Une autre philosophie du travail et du sens, à méditer sous les cerisiers.</p>
+        </div>
+
+        <div class="resource-item">
+            <strong>La Scandinavie — Le "lagom"</strong>
+            <p class="why">✈️ L'inspiration managériale: Le "lagom" suédois (ni trop, ni trop peu, le juste équilibre) et la confiance comme base du management. Des sociétés où l'équilibre vie pro/perso est roi.</p>
+        </div>
+
+        <div class="resource-item">
+            <strong>La Nouvelle-Zélande — Le "manaakitanga"</strong>
+            <p class="why">✈️ L'inspiration managériale: Le concept maori de "manaakitanga" — hospitalité, respect, bienveillance envers l'autre. Des paysages à couper le souffle et une culture du soin collectif.</p>
+        </div>
+
+        <div class="resource-item">
+            <strong>Le Bhoutan — Le Bonheur National Brut</strong>
+            <p class="why">✈️ L'inspiration managériale: Le seul pays au monde qui mesure le "Bonheur National Brut" plutôt que le PIB. Une invitation radicale à repenser ce qui compte vraiment.</p>
+        </div>
+
+        <div class="resource-item">
+            <strong>La Polynésie française — Le "fiu" et le rythme insulaire</strong>
+            <p class="why">✈️ L'inspiration managériale: Aux antipodes de l'urgence permanente, la culture polynésienne enseigne un autre rapport au temps. Le "fiu" (le ras-le-bol qu'on écoute au lieu de le nier) et l'art de vivre au rythme des lagons. Une leçon sur l'importance des pauses et du respect des cycles.</p>
+        </div>
+
+        <div class="resource-item">
+            <strong>L'Islande — Terre de feu, de glace et d'égalité</strong>
+            <p class="why">✈️ L'inspiration managériale: Championne mondiale de l'égalité femmes-hommes et pionnière de la semaine de 4 jours. Un petit pays qui ose des expérimentations sociales audacieuses. Paysages lunaires à couper le souffle et modèle de société inspirant.</p>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 7: ANNONCE FIN DE SÉRIE -->
+<section class="section-announcement">
+    <h2>C'est déjà la fin de l'été! 🌅</h2>
+    
+    <div class="announcement-box">
+        <div class="emoji">🙏</div>
+        <div class="subtitle">Merci de nous avoir suivis!</div>
+        <div class="content">
+            Trois éditions, trois façons de prendre soin de toi cet été. On espère que ce cahier de vacances t'aura fait du bien, rire, réfléchir et rêver un peu.
+        </div>
+        
+        <div class="countdown">La rentrée approche... en douceur 🍂</div>
+        
+        <div class="variants-preview">
+            <div class="variant-badge">
+                <strong>✅ Édition 1</strong>
+                Prendre du recul managérial
+            </div>
+            <div class="variant-badge">
+                <strong>✅ Édition 2</strong>
+                Recharge tes batteries
+            </div>
+            <div class="variant-badge">
+                <strong>✅ Édition 3</strong>
+                Management ailleurs
+            </div>
+        </div>
+        
+        <div class="closing">
+            Belle rentrée à toutes et tous! 🌍✨
+        </div>
+</section>
+
+
+<script>
+const quizData = [
+    {
+        question: "Historiquement, quelle part des ventes d'énergie finançait les Activités Sociales?",
+        answers: [
+            { text: "1% des ventes d'électricité et de gaz en France", correct: true },
+            { text: "10% des bénéfices d'EDF et GDF", correct: false }
+        ],
+        feedback: {
+            correct: "✅ Exact! Le célèbre '1%' des ventes d'énergie. Une singularité unique en Europe par rapport aux CE classiques (0,2% de la masse salariale).",
+            incorrect: "❌ Non, c'est le fameux '1%' des ventes d'électricité et de gaz. Voir la capsule sur le budget des Activités Sociales."
+        }
+    },
+    {
+        question: "Le budget est réparti entre la CCAS (national) et les CMCAS (local). Selon quelle logique?",
+        answers: [
+            { text: "Selon le nombre de bénéficiaires, de pensionnés et la superficie du territoire", correct: true },
+            { text: "À parts strictement égales entre toutes les caisses", correct: false }
+        ],
+        feedback: {
+            correct: "✅ Bravo! La répartition tient compte du nombre d'ouvrants-droit, d'inactifs et de la superficie du territoire de chaque CMCAS.",
+            incorrect: "❌ Non. La clé de répartition dépend du nombre de bénéficiaires, de pensionnés et de la taille du territoire. Voir la capsule budget."
+        }
+    },
+    {
+        question: "Qui décide et vote les budgets au niveau de ta CMCAS?",
+        answers: [
+            { text: "Le Conseil d'Administration, composé d'élus", correct: true },
+            { text: "La direction d'EDF, seule", correct: false }
+        ],
+        feedback: {
+            correct: "✅ Correct! Le Conseil d'Administration, composé d'élus sur liste syndicale, vote les budgets. C'est le principe de cogestion démocratique.",
+            incorrect: "❌ Non. Ce sont les élus du Conseil d'Administration de la CMCAS qui votent les budgets — pas l'employeur. C'est l'ADN démocratique des Activités Sociales."
+        }
+    }
+];
+
+let currentQuestionIndex = 0;
+let score = 0;
+let answered = false;
+
+function loadQuestion() {
+    const question = quizData[currentQuestionIndex];
+    
+    document.getElementById('qNumber').textContent = `Question ${currentQuestionIndex + 1}`;
+    document.getElementById('questionText').textContent = question.question;
+    document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+    
+    const progress = ((currentQuestionIndex + 1) / quizData.length) * 100;
+    document.getElementById('progressFill').style.width = progress + '%';
+    
+    const answersGrid = document.getElementById('answersGrid');
+    answersGrid.innerHTML = '';
+    
+    question.answers.forEach((answer, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'answer-btn';
+        btn.textContent = answer.text;
+        btn.onclick = () => selectAnswer(btn, answer, question);
+        answersGrid.appendChild(btn);
+    });
+
+    document.getElementById('feedback').innerHTML = '';
+    document.getElementById('feedback').classList.remove('show', 'correct', 'incorrect');
+    document.getElementById('nextBtn').classList.remove('show');
+    answered = false;
+}
+
+function selectAnswer(btn, answer, question) {
+    if (answered) return;
+    answered = true;
+
+    document.querySelectorAll('.answer-btn').forEach(b => b.classList.add('disabled'));
+
+    if (answer.correct) {
+        btn.classList.add('correct');
+        score++;
+        showFeedback(true, question.feedback.correct);
+    } else {
+        btn.classList.add('incorrect');
+        showFeedback(false, question.feedback.incorrect);
+    }
+
+    document.getElementById('nextBtn').classList.add('show');
+}
+
+function showFeedback(isCorrect, message) {
+    const feedback = document.getElementById('feedback');
+    feedback.textContent = message;
+    feedback.classList.add('show', isCorrect ? 'correct' : 'incorrect');
+}
+
+function nextQuestion() {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < quizData.length) {
+        loadQuestion();
+    } else {
+        showResults();
+    }
+}
+
+function showResults() {
+    document.getElementById('quiz').classList.remove('active');
+    document.getElementById('results').classList.add('show');
+
+    const percentage = Math.round((score / quizData.length) * 100);
+    document.getElementById('score').textContent = `${score}/${quizData.length}`;
+    
+    let emoji, subtitle, message;
+    
+    if (percentage === 100) {
+        emoji = '🏆';
+        subtitle = 'Parfait!';
+        message = 'Tu maîtrises les fondamentaux du Statut! Continue comme ça. 80 ans de collectif, ça mérite d\'être connu! 👏';
+    } else if (percentage >= 66) {
+        emoji = '👍';
+        subtitle = 'Très bien!';
+        message = 'Pas mal! Tu connais les bases. La capsule "Petite histoire de la CCAS" te permettra d\'explorer plus. 📚';
+    } else {
+        emoji = '🌟';
+        subtitle = 'Bien essayé!';
+        message = 'Le quiz te montre où tu pourrais en savoir plus. C\'est justement l\'intérêt — découvrir l\'histoire de ta structure! 🎯';
+    }
+
+    document.getElementById('emoji').textContent = emoji;
+    document.getElementById('subtitle').textContent = subtitle;
+    document.getElementById('message').textContent = message;
+}
+
+function restartQuiz() {
+    currentQuestionIndex = 0;
+    score = 0;
+    answered = false;
+    document.getElementById('quiz').classList.add('active');
+    document.getElementById('results').classList.remove('show');
+    loadQuestion();
+}
+
+document.getElementById('nextBtn').onclick = nextQuestion;
+document.getElementById('restartBtn').onclick = restartQuiz;
+
+loadQuestion();
+</script>
+
+</body>
+</html>
